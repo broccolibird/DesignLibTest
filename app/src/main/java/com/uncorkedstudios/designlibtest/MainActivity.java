@@ -4,20 +4,18 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ViewPagerFragment.Listener {
 
     private CoordinatorLayout mCoordinatorLayout;
 
@@ -27,13 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 
-    private RecyclerView mRecyclerView;
-
     private TabLayout mTabLayout;
 
     private ImageView mBackdrop;
 
-    private ViewPager mViewPager;
+    private FrameLayout mFragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
         mBackdrop = (ImageView) findViewById(R.id.backdrop);
 
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mViewPager.setAdapter(new RecyclerViewPagerAdapter());
-        mTabLayout.setupWithViewPager(mViewPager);
 
+        mFragmentContainer = (FrameLayout) findViewById(R.id.container);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.replace(R.id.container, ViewPagerFragment.newInstance());
+        ft.commit();
     }
 
     @Override
@@ -82,38 +80,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class RecyclerViewPagerAdapter extends PagerAdapter {
+    @Override
+    public void setupTabs(ViewPager viewPager) {
 
-        private int numLists = 6;
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "Tab " + position;
-        }
-
-        @Override
-        public int getCount() {
-            return numLists;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            RecyclerView recyclerView = new RecyclerView(MainActivity.this);
-            recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-            recyclerView.setAdapter(new CardAdapter());
-            container.addView(recyclerView);
-            return recyclerView;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-
-            container.removeView((View) object);
-        }
+        mTabLayout.setupWithViewPager(viewPager);
     }
+
 }

@@ -4,9 +4,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:colorPrimary">#1111ff</item>
-        <item name="android:colorPrimaryDark">#0000ff</item>
+        <item name="colorPrimary">#1111ff</item>
+        <item name="colorPrimaryDark">#0000ff</item>
     </style>
 
 </resources>
